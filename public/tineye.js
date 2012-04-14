@@ -63,6 +63,7 @@
         function( data ) {
           //postMessage( data.result[ 0 ].filepath );
           cb( data.result[ 0 ].filepath );
+          console.log(data);
         },
         __types.json
       );
