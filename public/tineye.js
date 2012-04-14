@@ -47,7 +47,7 @@
         "limit": numImg
       },
       function( data ) {
-        postMessage( data );
+        postMessage( data.result[ 0 ].filepath );
       },
       __types.json
     );

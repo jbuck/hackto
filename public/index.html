@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style>
+      .can {
+        width: 49%;
+        height: 100%;
+        display: inline-block;
+      }
+      .created {
+        width: 49%;
+        height: 100%;
+        display: inline-block;
+      }
+    </style>
     <title>HackTO Image Compositing</title>
     
     <script src="tec.js"></script>
@@ -15,7 +27,8 @@
     </script>
   </head>
   <body>
-    <img id="src" src="firefox-logo.png" style="display:none;">
-    <canvas id="c"></canvas>
+    <img id="src" src="firefox-logo.png" style="display:none" class="created">
+    <canvas id="c" class="can"></canvas>
+    <!--<div id="created" class="created"></div>-->
   </body>
 </html>
