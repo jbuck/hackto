@@ -32,8 +32,9 @@
         }
 
         for ( i = 0, l = t.slices.length; i < l; i++ ) {
-          var te = new TinEye( t.slices[ i ].data, 1, function( data ) {
+          var te = new TinEye( t.slices[ i ], 1, function( data ) {
             arr[ data.info.row ][ data.info.col ] = data.imgSrc;
+            document.getElementById( "created" ).src = "http://multicolorengine.tineye.com/hackdays_flickr/collection/?filepath=" + data.imgSrc;
             count++;
           });
           te.getColors();
@@ -60,6 +61,6 @@
   <body>
     <img id="src" src="firefox-logo.png" style="display:none" class="created">
     <canvas id="c" class="can"></canvas>
-    <!--<div id="created" class="created"></div>-->
+    <img id="created" class="created"></img>
   </body>
 </html>
