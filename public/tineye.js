@@ -47,11 +47,19 @@
     };
 
     this.getImage = function ( numImg, imgArr ) {
-      XHR.post( "/hackdays_flickr/rest/extract_colors/",
-        {
-          "image": "@" + img,
-          "limit": numImg
-        },
+      var obj = {},
+          i = 0;
+
+      for( var item in imgArr ){
+        obj["colors" + i] = imgArr[item];
+        i++;
+      }
+
+      obj.limit = numImg;
+      obj.image = "@" + img;
+
+      XHR.post( "/hackdays_flickr/rest/color_search/",
+        obj,
         function( data ) {
           //postMessage( data.result[ 0 ].filepath );
           cb( data.result[ 0 ].filepath );
