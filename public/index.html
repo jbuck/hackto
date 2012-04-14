@@ -14,15 +14,47 @@
       }
     </style>
     <title>HackTO Image Compositing</title>
-    
+
     <script src="tec.js"></script>
+    <script src="tineye.js"></script>
     <script>
+      window.count = 0;
+      function build( t ) {
+        var arr = [],
+            i, l;
+
+        for ( i = 0, l = 5; i < l; i++ ) {
+          var innerArr = [];
+          arr.push( innerArr );
+          for( var j = 0, k = 5; j < k; j++ ) {
+            innerArr.push( undefined );
+          }
+        }
+
+        for ( i = 0, l = t.slices.length; i < l; i++ ) {
+          var te = new TinEye( t.slices[ i ].data.data, 1, function( data ) {
+            arr[ data.info.row ][ data.info.col ] = data.imgSrc;
+            count++;
+          });
+          console.log( te );
+          te.getColors();
+        }
+
+        var ready = (function() {
+          if ( count !== 24 ) {
+            setTimeout( ready, 100 );
+          } else {
+            // post some data to scotts cool shit
+          }
+        })();
+      }
+
       setTimeout(function() {
         var img = document.getElementById('src'),
             target = document.getElementById('c');
-      
+
         var t = new TEC(img, target, 5, 5);
-        console.log(t.slices.length);
+        build( t );
       }, 2000);
     </script>
   </head>
