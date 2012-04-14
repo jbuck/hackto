@@ -32,9 +32,15 @@
         }
 
         for ( i = 0, l = t.slices.length; i < l; i++ ) {
-          var te = new TinEye( t.slices[ i ], 1, function( data ) {
-            arr[ data.info.row ][ data.info.col ] = data.imgSrc;
-            document.getElementById( "created" ).src = "http://multicolorengine.tineye.com/hackdays_flickr/collection/?filepath=" + data.imgSrc;
+          var te = new TinEye( t.slices[ i ], function( data ) {            
+            var blah = new Image();
+            blah.onload = function() {
+              var canvas = document.getElementById('d');
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(this, data.info.x, data.info.y, data.info.width, data.info.height);
+            }
+            
+            blah.src = "http://multicolorengine.tineye.com/hackdays_flickr/collection/?filepath=" + data.imgSrc;
             count++;
           });
           te.getColors();
@@ -51,16 +57,24 @@
 
       setTimeout(function() {
         var img = document.getElementById('src'),
-            target = document.getElementById('c');
+            target = document.getElementById('c'),
+            d = document.getElementById('d');
 
-        var t = new TEC(img, target, 1, 1);
+        var t = new TEC(img, target, 10, 10);
+        d.width = target.width;
+        d.height = target.height;
         build( t );
       }, 2000);
     </script>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
   </head>
   <body>
     <img id="src" src="firefox-logo.png" style="display:none" class="created">
     <canvas id="c" class="can"></canvas>
-    <img id="created" class="created"></img>
+    <canvas id="d" class="created"></canvas>
   </body>
 </html>

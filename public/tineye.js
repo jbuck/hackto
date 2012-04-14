@@ -1,8 +1,7 @@
 (function() {
-  var TinEye = window.TinEye = function( img, howMany, cb ) {
+  var TinEye = window.TinEye = function( img, cb ) {
     var image = img.data,
         canvasData = img,
-        numColors = howMany,
         callback = cb,
         _this = this;
 
@@ -47,10 +46,7 @@
           if (this.readyState == 4) {
             cb({
               imgSrc: this.response.result[ 0 ].filepath,
-              info: {
-                row: canvasData.row,
-                col:  canvasData.col
-              }
+              info: canvasData
             });
           }
         },

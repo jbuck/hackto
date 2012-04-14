@@ -29,7 +29,9 @@
           col: i,
           row: n,
           x: colinc * i,
-          y: rowinc * n
+          y: rowinc * n,
+          width: colinc,
+          height: rowinc
         };
         
         arr.push(slice);
