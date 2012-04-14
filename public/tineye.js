@@ -6,20 +6,6 @@
         callback = cb,
         _this = this;
 
-    function parameterize(data) {
-      var s = [];
-
-      for (var key in data) {
-        s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
-      }
-
-      return s.join("&").replace("/%20/g", "+");
-    }
-
-    var __types = {
-      form: "multipart/form-data"
-    };
-
     var XHR = {
       "get": function(url, callback) {
         var xhr = new XMLHttpRequest();
