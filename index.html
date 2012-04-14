@@ -1,30 +1,21 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Hack TO</title>
+    <title>HackTO Image Compositing</title>
+    
+    <script src="tec.js"></script>
+    <script>
+      setTimeout(function() {
+        var img = document.getElementById('src'),
+            target = document.getElementById('c');
+      
+        var t = new TEC(img, target, 5, 5);
+        console.log(t.slices.length);
+      }, 2000);
+    </script>
   </head>
-  <script>
-    var w;
-
-    function startWorker(){
-      if(typeof(Worker)!=="undefined"){
-        w=new Worker("hackTO.js");
-        w.onmessage = function (event) {
-          document.getElementById("result").innerHTML = event.data;
-        };
-        w.postMessage("Test " + Math.random() * 1000);
-      }
-      else{
-        document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
-      }
-    }
-
-    function stopWorker(){ 
-      w.terminate();
-    }
-  </script>
   <body>
-    <p>Count numbers: <output id="result"></output></p>
-    <button onclick="startWorker()">Start!</button>
-    <button onclick="stopWorker()">Stop!</button>
+    <img id="src" src="firefox-logo.png" style="display:none;">
+    <canvas id="c"></canvas>
   </body>
 </html>
