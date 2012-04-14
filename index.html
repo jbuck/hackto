@@ -5,17 +5,20 @@
   <script>
     var w;
 
-    function startWorker(){
-      if(typeof(Worker)!=="undefined"){
-        w=new Worker("hackTO.js");
-        w.onmessage = function (event) {
-          document.getElementById("result").innerHTML = event.data;
-        };
-        w.postMessage("Test " + Math.random() * 1000);
-      }
-      else{
-        document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
-      }
+    document.addEventListener("DOMContentLoaded", function(e){
+      w = new Worker("hackTO.js");
+
+      w.onmessage = function (event) {
+        document.getElementById("result").innerHTML = event.data;
+      };
+    }, false);
+
+    function randomNumber(){
+      w.postMessage({ "cmd" : "randNum", "value" : Math.random() * 1000000000 });
+    }
+
+    function sendText( data ){
+      w.postMessage({ "cmd" : "sendText", "value" : document.getElementById("textData").value })
     }
 
     function stopWorker(){ 
@@ -24,7 +27,10 @@
   </script>
   <body>
     <p>Count numbers: <output id="result"></output></p>
-    <button onclick="startWorker()">Start!</button>
+    <button onclick="randomNumber()">Random Number!</button>
+    <button onclick="sendText()">Send text below!</button>
     <button onclick="stopWorker()">Stop!</button>
+    <br>
+    <input type="text" id="textData" />
   </body>
 </html>

@@ -1,9 +1,17 @@
-var i = 0;
-
-function timedCount( data ){
+function randNum( data ){
   postMessage(data);
 }
 
 self.addEventListener("message", function(e){
-  timedCount(e.data);
+  var data = e.data;
+
+  switch (data.cmd) {
+    case "randNum":
+      randNum(data.value);
+      break;
+
+    case "sendText":
+      postMessage(data.value);
+      break;
+  };
 }, false);
