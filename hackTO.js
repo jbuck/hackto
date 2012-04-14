@@ -1,5 +1,12 @@
 function randNum( data ){
-  postMessage(data);
+  postMessage({ "value" : Math.random() * 1000000, "id" : data.id });
+}
+
+function counter(data){
+  postMessage({ "value" : Math.random() * 10000, "id" : data.id });
+  setTimeout( function(){
+    counter(data);
+  }, 300);
 }
 
 self.addEventListener("message", function(e){
@@ -7,11 +14,15 @@ self.addEventListener("message", function(e){
 
   switch (data.cmd) {
     case "randNum":
-      randNum(data.value);
+      randNum(data);
       break;
 
     case "sendText":
-      postMessage(data.value);
+      postMessage({ "value" : data.value, "id" : data.id });
+      break;
+
+    case "newCounter":
+      counter(data);
       break;
   };
 }, false);
