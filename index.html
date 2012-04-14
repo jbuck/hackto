@@ -57,6 +57,9 @@
             console.log( "error" );
           },
           loadedmetadata: function( e ) {
+          
+            p.media.style.height = "200px";
+            p.media.controls = true;
 
             var inc = p.duration() / numOfImages;
             var currentInc = 0;
