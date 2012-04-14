@@ -47,7 +47,7 @@
     };
 
     this.getImage = function ( numImg, imgArr ) {
-      XHR.post( "http://multicolorengine.tineye.com/hackdays_flickr/rest/extract_colors/",
+      XHR.post( "/hackdays_flickr/rest/extract_colors/",
         {
           "image": "@" + img,
           "limit": numImg
@@ -61,7 +61,7 @@
     }
 
     this.getColors = function() {
-      XHR.post( "http://multicolorengine.tineye.com/hackdays_flickr/rest/extract_colors/",
+      XHR.post( "/hackdays_flickr/rest/extract_colors/",
         {
           "image[0]": img,
           "limit": numColors
