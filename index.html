@@ -1,52 +1,21 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Hack TO</title>
-  </head>
-  <script>
-    var w;
-
-    document.addEventListener("DOMContentLoaded", function(e){
-      w = new Worker("hackTO.js");
-
-      w.onmessage = function (e) {
-        var target = document.getElementById(e.data.id);
-        target.innerHTML = e.data.value;
-      };
-    }, false);
-
-    function randomNumber(){
-      var div = document.createElement("div");
-      div.id = "SuckJaw-" + Math.random() * 100000;
-      document.body.appendChild(div);
+    <title>HackTO Image Compositing</title>
+    
+    <script src="tec.js"></script>
+    <script>
+      setTimeout(function() {
+        var img = document.getElementById('src'),
+            target = document.getElementById('c');
       
-      w.postMessage({ "cmd" : "randNum", "id" : div.id });
-    }
-
-    function sendText( data ){
-      var div = document.createElement("div");
-      div.id = "SuckJaw-" + Math.random() * 100000;
-      document.body.appendChild(div);
-      w.postMessage({ "cmd" : "sendText", "value" : document.getElementById("textData").value, "id" : div.id })
-    }
-
-    function counter(){
-      var div = document.createElement("div");
-      div.id = "SuckJaw-" + Math.random() * 100000;
-      document.body.appendChild(div);
-
-      w.postMessage({ "cmd" : "newCounter", "id" : div.id });
-    }
-
-    function stopWorker(){ 
-      w.terminate();
-    }
-  </script>
+        var t = new TEC(img, target, 5, 5);
+        console.log(t.slices.length);
+      }, 2000);
+    </script>
+  </head>
   <body>
-    <button onclick="randomNumber()">Random Number!</button>
-    <button onclick="sendText()">Send text below!</button>
-    <button onclick="counter()">New Counter!</button>
-    <button onclick="stopWorker()">Stop!</button>
-    <br>
-    <input type="text" id="textData" />
+    <img id="src" src="firefox-logo.png" style="display:none;">
+    <canvas id="c"></canvas>
   </body>
 </html>
