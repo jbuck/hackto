@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .can {
+        width: 49%;
+        height: 100%;
+        display: inline-block;
+      }
+      .created {
+        width: 49%;
+        height: 100%;
+        display: inline-block;
+      }
+    </style>
+    <title>HackTO Image Compositing</title>
+
+    <script src="tec.js"></script>
+    <script src="tineye.js"></script>
+    <script>
+      window.count = 0;
+      function build( t ) {
+        var arr = [],
+            i, l;
+
+        for ( i = 0, l = 5; i < l; i++ ) {
+          var innerArr = [];
+          arr.push( innerArr );
+          for( var j = 0, k = 5; j < k; j++ ) {
+            innerArr.push( undefined );
+          }
+        }
+
+        for ( i = 0, l = t.slices.length; i < l; i++ ) {
+          var te = new TinEye( t.slices[ i ].data, 1, function( data ) {
+            arr[ data.info.row ][ data.info.col ] = data.imgSrc;
+            count++;
+          });
+          te.getColors();
+        }
+
+        var ready = (function() {
+          if ( count !== 24 ) {
+            setTimeout( ready, 100 );
+          } else {
+            // post some data to scotts cool shit
+          }
+        })();
+      }
+
+      setTimeout(function() {
+        var img = document.getElementById('src'),
+            target = document.getElementById('c');
+
+        var t = new TEC(img, target, 1, 1);
+        build( t );
+      }, 2000);
+    </script>
+  </head>
+  <body>
+    <img id="src" src="firefox-logo.png" style="display:none" class="created">
+    <canvas id="c" class="can"></canvas>
+    <!--<div id="created" class="created"></div>-->
+  </body>
+</html>
