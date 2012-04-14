@@ -1,6 +1,30 @@
 <html>
   <head>
+    <title>Hack TO</title>
   </head>
+  <script>
+    var w;
+
+    function startWorker(){
+      if(typeof(Worker)!=="undefined"){
+        w=new Worker("hackTO.js");
+        w.onmessage = function (event) {
+          document.getElementById("result").innerHTML = event.data;
+        };
+        w.postMessage("Test " + Math.random() * 1000);
+      }
+      else{
+        document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
+      }
+    }
+
+    function stopWorker(){ 
+      w.terminate();
+    }
+  </script>
   <body>
+    <p>Count numbers: <output id="result"></output></p>
+    <button onclick="startWorker()">Start!</button>
+    <button onclick="stopWorker()">Stop!</button>
   </body>
 </html>
