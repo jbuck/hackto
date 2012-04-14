@@ -1,0 +1,8 @@
+{
+  "name": "tec",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "*",
+    "http-proxy": "*"
+  }
+}
