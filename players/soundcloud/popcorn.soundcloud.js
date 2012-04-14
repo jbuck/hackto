@@ -18,6 +18,11 @@
           playing = false,
           muted = false;
 
+      Popcorn.getJSONP( "https://api.soundcloud.com/tracks/" + media.src.replace( "http://api.soundcloud.com/tracks/", "" ) + ".json?client_id=YOUR_CLIENT_ID&callback=jsonp", function( e ) {
+      
+        duration = e.duration / 1000;
+      });
+          
       options._container = container;
 
       this.play = function() {
@@ -118,10 +123,10 @@
             media.dispatchEvent( "ended" );
           });
 
-          var durationCheck = function() {
+          var durationCheckNot = function() {
           
-            widget.getDuration(function( data ) {
-console.log( data, data / 1000 );
+            /*widget.getDuration(function( data ) {
+
               duration = data / 1000;
               media.dispatchEvent( "durationchange" );
               // update the readyState after we have the duration
@@ -132,20 +137,32 @@ console.log( data, data / 1000 );
               media.dispatchEvent( "canplaythrough" );
               media.dispatchEvent( "load" );
               playing && media.play();
-            });
+            });*/
             widget.getVolume(function( data ) {
               lastVolume = data / 100;
             });
-            durationCheck = function(){};
+            durationCheckNot = function(){};
           };
           
           widget.bind(SC.Widget.Events.PLAY_PROGRESS, function( data ) {
-            durationCheck();
+            durationCheckNot();
             currentTime = data.currentPosition / 1000;
             media.dispatchEvent( "timeupdate" );
           });
           widget.bind(SC.Widget.Events.READY, function( data ) {
-            //media.play();
+            //widget.getDuration(function( data ) {
+
+              //duration = data / 1000;
+              //media.dispatchEvent( "durationchange" );
+              // update the readyState after we have the duration
+              media.readyState = 4;
+              media.dispatchEvent( "readystatechange" );
+              media.dispatchEvent( "loadedmetadata" );
+              media.dispatchEvent( "loadeddata" );
+              media.dispatchEvent( "canplaythrough" );
+              media.dispatchEvent( "load" );
+              playing && media.play();
+            //});
           });
         }, false);
         media.appendChild( container );
