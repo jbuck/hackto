@@ -1,6 +1,7 @@
 (function() {
   var TinEye = window.TinEye = function( img, howMany, cb ) {
-    var image = img,
+    var image = img.data,
+        canvasData = img,
         numColors = howMany,
         callback = cb,
         _this = this;
@@ -38,16 +39,19 @@
       var formData = new FormData();
       formData.append("limit", 2);
       for( var thing in obj ) {
-        console.log( thing, obj[ thing ] );
         formData.append("" + thing, "" + obj[ thing ]);
       }
 
       XHR.post( "/hackdays_flickr/rest/color_search/",
         function( data ) {
           if (this.readyState == 4) {
-            console.log( this.response );
-            _this.getImage( this.response );
-            cb( this.response.result[ 0 ].filepath );
+            cb({
+              imgSrc: this.response.result[ 0 ].filepath,
+              info: {
+                row: canvasData.row,
+                col:  canvasData.col
+              }
+            });
           }
         },
         formData
@@ -67,7 +71,6 @@
       XHR.post( "/hackdays_flickr/rest/extract_colors/",
         function( data ) {
           if (this.readyState == 4) {
-            console.log( this.response );
             _this.getImage( 2, this.response );
           }
         },
