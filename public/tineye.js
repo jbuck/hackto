@@ -35,29 +35,36 @@
       }
     };
 
-    this.getImage = function ( numImg, imgArr ) {
+    this.getImage = function ( numImg, data ) {
       var obj = {},
           i = 0;
 
+      var imgArr = data.result;
       for( var item in imgArr ){
-        obj["colors" + i] = imgArr[item];
+        if ( i >= 1 ) {
+          break;
+        }
+        obj["colors[" + i + "]"] = imgArr[item].color;
+        obj[ "weights[" + i + "]"] = imgArr[ item ].weight;
         i++;
       }
 
-      obj.limit = numImg;
-      obj.image = "@" + img;
+      var formData = new FormData();
+      formData.append("limit", 2);
+      for( var thing in obj ) {
+        console.log( thing, obj[ thing ] );
+        formData.append("" + thing, "" + obj[ thing ]);
+      }
 
       XHR.post( "/hackdays_flickr/rest/color_search/",
-        obj,
         function( data ) {
-          //postMessage( data.result[ 0 ].filepath );
-          cb( data.result[ 0 ].filepath );
-          console.log(data);
+          if (this.readyState == 4) {
+            console.log( this.response );
+            _this.getImage( this.response );
+            cb( this.response.result[ 0 ].filepath );
+          }
         },
-        {
-          "image": "@" + img,
-          "limit": numImg
-        }
+        formData
       );
     }
 
@@ -75,7 +82,7 @@
         function( data ) {
           if (this.readyState == 4) {
             console.log( this.response );
-            _this.getImage( this.response );
+            _this.getImage( 2, this.response );
           }
         },
         formData
