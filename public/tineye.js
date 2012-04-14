@@ -16,8 +16,7 @@
     }
 
     var __types = {
-      form: "application/x-www-form-urlencoded",
-      json: "application/json"
+      form: "multipart/form-data"
     };
 
     var XHR = {
@@ -63,13 +62,13 @@
     this.getColors = function() {
       XHR.post( "/hackdays_flickr/rest/extract_colors/",
         {
-          "image[0]": img,
+          "image[0]": window.atob( image ),
           "limit": numColors
         },
         function( data ) {
+          console.log( data );
           _this.getImage( 1, data.result );
-        },
-        __types.json
+        }
       );
     }
 
