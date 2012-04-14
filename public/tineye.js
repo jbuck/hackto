@@ -27,7 +27,7 @@
 
       var imgArr = data.result;
       for( var item in imgArr ){
-        if ( i >= 1 ) {
+        if ( i >= 2 ) {
           break;
         }
         obj["colors[" + i + "]"] = imgArr[item].color;
