@@ -16,8 +16,7 @@
     }
 
     var __types = {
-      form: "application/x-www-form-urlencoded",
-      json: "application/json"
+      form: "multipart/form-data"
     };
 
     var XHR = {
@@ -27,22 +26,12 @@
         xhr.onreadystatechange = callback;
         xhr.send(null);
       },
-      "post": function(url, data, callback, type) {
+      "post": function(url, callback, data) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.onreadystatechange = callback;
-        if( !type || type === "form" ){
-          xhr.setRequestHeader("Content-Type", __types.form);
-          xhr.send(parameterize(data));
-        }
-        else if( __types[ type ] ){
-          xhr.setRequestHeader("Content-Type", __types[ type ]);
-          xhr.send(data);
-        }
-        else{
-          xhr.setRequestHeader("Content-Type", "text/plain");
-          xhr.send(data);
-        }
+        xhr.responseType = 'json';
+        xhr.send(data);
       }
     };
 
@@ -65,20 +54,31 @@
           cb( data.result[ 0 ].filepath );
           console.log(data);
         },
-        __types.json
+        {
+          "image": "@" + img,
+          "limit": numImg
+        }
       );
     }
 
     this.getColors = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      var ctx = canvas.getContext('2d');
+      ctx.putImageData(image, 0, 0);
+      var formData = new FormData();
+      formData.append("limit", 2);
+      formData.append("images[0]", canvas.mozGetAsFile("foo.png"));
+
       XHR.post( "/hackdays_flickr/rest/extract_colors/",
-        {
-          "image[0]": img,
-          "limit": numColors
-        },
         function( data ) {
-          _this.getImage( 1, data.result );
+          if (this.readyState == 4) {
+            console.log( this.response );
+            _this.getImage( this.response );
+          }
         },
-        __types.json
+        formData
       );
     }
 

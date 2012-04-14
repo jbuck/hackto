@@ -32,11 +32,10 @@
         }
 
         for ( i = 0, l = t.slices.length; i < l; i++ ) {
-          var te = new TinEye( t.slices[ i ].data.data, 1, function( data ) {
+          var te = new TinEye( t.slices[ i ].data, 1, function( data ) {
             arr[ data.info.row ][ data.info.col ] = data.imgSrc;
             count++;
           });
-          console.log( te );
           te.getColors();
         }
 
@@ -53,7 +52,7 @@
         var img = document.getElementById('src'),
             target = document.getElementById('c');
 
-        var t = new TEC(img, target, 5, 5);
+        var t = new TEC(img, target, 1, 1);
         build( t );
       }, 2000);
     </script>
