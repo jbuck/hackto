@@ -26,49 +26,46 @@
         xhr.onreadystatechange = callback;
         xhr.send(null);
       },
-      "post": function(url, data, callback, type) {
+      "post": function(url, callback, data) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.onreadystatechange = callback;
-        if( !type || type === "form" ){
-          xhr.setRequestHeader("Content-Type", __types.form);
-          xhr.send(parameterize(data));
-        }
-        else if( __types[ type ] ){
-          xhr.setRequestHeader("Content-Type", __types[ type ]);
-          xhr.send(data);
-        }
-        else{
-          xhr.setRequestHeader("Content-Type", "text/plain");
-          xhr.send(data);
-        }
+        xhr.responseType = 'json';
+        xhr.send(data);
       }
     };
 
     this.getImage = function ( numImg, imgArr ) {
       XHR.post( "/hackdays_flickr/rest/extract_colors/",
-        {
-          "image": "@" + img,
-          "limit": numImg
-        },
         function( data ) {
           //postMessage( data.result[ 0 ].filepath );
           cb( data.result[ 0 ].filepath );
         },
-        __types.json
+        {
+          "image": "@" + img,
+          "limit": numImg
+        }
       );
     }
 
     this.getColors = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      var ctx = canvas.getContext('2d');
+      ctx.putImageData(image, 0, 0);
+      var formData = new FormData();
+      formData.append("limit", 2);
+      formData.append("images[0]", canvas.mozGetAsFile("foo.png"));
+
       XHR.post( "/hackdays_flickr/rest/extract_colors/",
-        {
-          "image[0]": window.atob( image ),
-          "limit": numColors
-        },
         function( data ) {
-          console.log( data );
-          _this.getImage( 1, data.result );
-        }
+          if (this.readyState == 4) {
+            console.log( this.response );
+            _this.getImage( this.response );
+          }
+        },
+        formData
       );
     }
 
