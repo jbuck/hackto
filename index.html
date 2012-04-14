@@ -1,0 +1,94 @@
+<html>
+<head>
+  <script src="popcorn.js"></script>
+  <script src="image/popcorn.image.js"></script>
+  <script src="modules/player/popcorn.player.js"></script>
+  <script src="players/youtube/popcorn.youtube.js"></script>
+  <script src="players/soundcloud/popcorn.soundcloud.js"></script>
+  <script>
+  
+    // returns the value under a key in the query string
+    var getQuerystring = function( key, default_ ) {
+      if (default_==null) default_="";
+      key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+      var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+      var qs = regex.exec(window.location.href);
+      if(qs == null)
+        return default_;
+      else
+        return qs[1];
+    };
+  
+    var imageArray = [[
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg"
+    ], [
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg",
+      "http://i.zdnet.com/blogs/firefox_.jpg"
+    ]];
+  
+    var numOfImages = imageArray[ 0 ].length * imageArray.length;
+  
+  
+  
+    document.addEventListener( "DOMContentLoaded", function() {
+  
+      var imageContainer = document.getElementById( "images" );
+  
+  
+  
+      /*Popcorn.plugin( "hackto", {
+        _setup: function( options ) {
+        
+          
+        },
+        start: function( event, options ) {},
+        end: function( event, options ) {}
+      });*/
+  
+      var p = Popcorn.smart( "#popcorn", getQuerystring( "video" ), {
+        events: {
+          loadedmetadata: function( e ) {
+
+            var inc = p.duration() / numOfImages;
+            var currentInc = 0;
+      
+            for ( var h = 0; h < imageArray.length; h++ ) {
+            
+              var contain = document.createElement( "div" );
+              //contain.id = "h:" + h + "w" + w;
+              imageContainer.appendChild( contain );
+
+              for ( var w = 0; w < imageArray[ h ].length; w++ ) {
+
+                var target = document.createElement( "span" );
+                contain.appendChild( target );
+                target.id = "h" + h + "w" + w;
+                console.log( p.duration(), currentInc, inc );
+                p.image({
+                  start: currentInc+=inc,
+                  src: imageArray[ h ][ w ],
+                  target: target.id
+                });
+              }
+            }
+          }
+        }
+      });
+      /*p.image({
+        start: 1,
+        end: 10,
+        
+      });*/
+    }, false );
+  </script>
+</head>
+<body>
+<div style="height: 200px;"id="popcorn"></div>
+<div id="images"></div>
+</body>
+</html>
